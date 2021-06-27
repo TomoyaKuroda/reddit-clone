@@ -39,18 +39,19 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String      @id @default(cuid())
   name          String?
-  email         String?   @unique
+  email         String?     @unique
   emailVerified DateTime?
   image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
   accounts      Account[]
   sessions      Session[]
   posts         Post[]
   comments      Comment[]
   votes         Vote[]
+  joinedSubs    Subreddit[]
 }
 
 model VerificationRequest {
@@ -65,9 +66,13 @@ model VerificationRequest {
 }
 
 model Subreddit {
-  id    String @id @default(cuid())
-  name  String @unique
-  posts Post[]
+  id          String   @id @default(cuid())
+  name        String   @unique
+  displayName String
+  infoBoxText String
+  createdAt   DateTime @default(now())
+  posts       Post[]
+  joinedUsers User[]
 }
 
 model Post {
@@ -80,25 +85,34 @@ model Post {
   votes       Vote[]
   subredditId String
   userId      String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 }
 
 model Comment {
-  id     String @id @default(cuid())
-  body   String
-  user   User   @relation(fields: [userId], references: [id])
-  votes  Vote[]
-  post   Post   @relation(fields: [postId], references: [id])
-  userId String
-  postId String
+  id        String   @id @default(cuid())
+  body      String
+  user      User     @relation(fields: [userId], references: [id])
+  votes     Vote[]
+  post      Post     @relation(fields: [postId], references: [id])
+  userId    String
+  postId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Vote {
-  id         String  @id @default(cuid())
-  isDownvote Boolean
-  user       User    @relation(fields: [userId], references: [id])
-  post       Post    @relation(fields: [postId], references: [id])
-  comment    Comment @relation(fields: [commentId], references: [id])
-  userId     String
-  postId     String
-  commentId  String
+  id        String   @id @default(cuid())
+  voteType  VoteType
+  user      User     @relation(fields: [userId], references: [id])
+  post      Post?    @relation(fields: [postId], references: [id])
+  comment   Comment? @relation(fields: [commentId], references: [id])
+  userId    String
+  postId    String?
+  commentId String?
+}
+
+enum VoteType {
+  UPVOTE
+  DOWNVOTE
 }
