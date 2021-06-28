@@ -2,6 +2,8 @@ import { Prisma } from '@prisma/client'
 import { useSession } from 'next-auth/client'
 import { useRouter } from 'next/router'
 import { mutate } from 'swr'
+import 'react-quill/dist/quill.snow.css'
+const ReactQuill = typeof window === 'object' ? require('react-quill') : () => false;
 
 type FullPost = Prisma.PostGetPayload<{
     include: { user: true; subreddit: true; votes: true }
@@ -120,7 +122,10 @@ export default function SubredditPost({ post, subUrl, fullSub }: Props) {
             <div>{calculatevoteCount(post.votes)}</div>
             <div>{post.user.name}</div>
             <div>{post.title}</div>
-            <div>{post.body}</div>
+            <ReactQuill value={post.body}
+                readOnly={true}
+                theme={'snow'}
+                modules={{ toolbar: false }} />
         </div>
     )
 }
