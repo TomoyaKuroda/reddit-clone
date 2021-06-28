@@ -49,7 +49,7 @@ const handler = async (req, res) => {
             data: {
                 voteType: type,
                 user: {
-                    connect: { id: session.userId },
+                    connect: { id: String(session.userId) },
                 },
                 post: {
                     connect: { id: postId },

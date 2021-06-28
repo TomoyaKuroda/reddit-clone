@@ -42,11 +42,11 @@ export default function Nav() {
             <h3 className='text-white d-hidden d-md-block'>
                 Welcome {loading ? '' : session?.user?.name}
             </h3>
-            {!session && <button onClick={signIn}>Login</button>}
-            {session && <button onClick={() => {
+            {!session && (<button onClick={() => signIn()}>Login</button>)}
+            {session && (<button onClick={() => {
                 router.push('/')
                 signOut()
-            }}>Logout</button>}
+            }}>Logout</button>)}
         </nav>
     )
 }

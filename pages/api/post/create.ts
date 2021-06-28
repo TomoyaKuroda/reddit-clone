@@ -22,12 +22,12 @@ const handler = async (req, res) => {
                 },
                 user: {
                     connect: {
-                        id: session.userId
+                        id: String(session.userId)
                     }
                 },
                 votes: {
                     create: {
-                        user: { connect: { id: session.userId } },
+                        user: { connect: { id: String(session.userId) } },
                         voteType: "UPVOTE"
                     }
                 }
